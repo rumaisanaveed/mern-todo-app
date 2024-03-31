@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.rm-register-checkbox.ant-checkbox-inner:checked {
+  background-color: #7754f6;
+}
