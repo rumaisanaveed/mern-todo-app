@@ -2,6 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
-.rm-register-checkbox.ant-checkbox-inner:checked {
-  background-color: #7754f6;
+:root {
+  --primary-color: #7754f6;
+  --primary-hover-color: #9e88e6;
+}
+
+.rm-register-checkbox .ant-checkbox-checked .ant-checkbox-inner {
+  background-color: #7754f6 !important;
+  border-color: #7754f6 !important;
+}
+
+.rm-register-btn .ant-btn.ant-btn-primary,
+.ant-btn-primary {
+  background-color: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+  &:hover {
+    background-color: var(--primary-hover-color) !important;
+    border-color: var(--primary-hover-color) !important;
+  }
 }

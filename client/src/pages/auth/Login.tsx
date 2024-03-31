@@ -1,9 +1,41 @@
 import { Button, Checkbox, Form, Input } from "antd";
 import MainLayout from "../../components/Layouts/AuthLayout";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
 
 export default function Login() {
   const navigate = useNavigate();
+
+  const onFinish = (values: any) => {
+    console.log(values);
+    axios
+      .post("http://localhost:5001/api/users/login", {
+        email: values.email,
+        password: values.password,
+      })
+      .then((response) => {
+        console.log(response);
+        if (response.status === 200) {
+          toast.success("You've successfully logged in.");
+        }
+      })
+      .catch((error) => {
+        handleError(error);
+        console.log(error);
+      });
+  };
+
+  const handleError = (error: any) => {
+    if (error.response) {
+      toast.error(error.response.data.errorMessage || "An error occured.");
+    } else if (error.request) {
+      toast.error("Request failed. Please try again later.");
+    } else {
+      toast.error(error.message || "An error occured.");
+    }
+  };
+
   return (
     <MainLayout>
       <div className="flex flex-col p-5 mt-20 max-w-md mx-auto w-full h-fit">
@@ -11,11 +43,12 @@ export default function Login() {
         <p className="text-[#818181] font-normal text-sm py-3">
           Login to your account in seconds
         </p>
+        <ToastContainer />
         <Form
           layout="vertical"
           autoComplete="off"
           className="mt-5"
-          onFinish={(values) => console.log(values)}
+          onFinish={(values) => onFinish(values)}
         >
           <Form.Item
             name="email"

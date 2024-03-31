@@ -1,9 +1,43 @@
 import { Button, Checkbox, Form, Input } from "antd";
 import MainLayout from "../../components/Layouts/AuthLayout";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
 
 export default function Register() {
   const navigate = useNavigate();
+
+  const onFinish = (values: any) => {
+    console.log(values.email);
+    axios
+      .post("http://localhost:5001/api/users/register", {
+        firstname: values.firstname,
+        lastname: values.lastname,
+        email: values.email,
+        password: values.password,
+      })
+      .then(
+        (response) => {
+          if (response.status === 201) {
+            toast.success("You've successfully signed in.");
+          }
+        },
+        (error) => {
+          handleError(error);
+        }
+      );
+  };
+
+  const handleError = (error: any) => {
+    if (error.response) {
+      toast.error(error.response.data.errorMessage || "An error occured.");
+    } else if (error.request) {
+      toast.error("Request failed. Please try again later.");
+    } else {
+      toast.error(error.message || "An error occured.");
+    }
+  };
+
   return (
     <MainLayout>
       <div className="flex flex-col p-5 mt-12 max-w-md mx-auto w-full h-fit">
@@ -11,11 +45,12 @@ export default function Register() {
         <p className="text-[#818181] font-normal text-sm py-3">
           Create your account in seconds
         </p>
+        <ToastContainer />
         <Form
           layout="vertical"
           autoComplete="off"
           className="mt-5"
-          onFinish={(values) => console.log(values)}
+          onFinish={(values) => onFinish(values)}
         >
           <Form.Item
             name="firstname"
@@ -63,6 +98,7 @@ export default function Register() {
             <Button
               className="bg-[#7754F6] text-white font-semibold w-full py-3 h-fit "
               type="primary"
+              rootClassName="rm-register-btn"
               htmlType="submit"
             >
               Create account
