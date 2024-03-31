@@ -19,6 +19,9 @@ export default function Login() {
         console.log(response);
         if (response.status === 200) {
           toast.success("You've successfully logged in.");
+          setTimeout(() => {
+            navigate("/");
+          }, 1000);
         }
       })
       .catch((error) => {

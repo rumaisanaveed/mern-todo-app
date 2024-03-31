@@ -21,6 +21,9 @@ export default function Register() {
         (response) => {
           if (response.status === 201) {
             toast.success("You've successfully signed in.");
+            setTimeout(() => {
+              navigate("/");
+            }, 2000);
           }
         },
         (error) => {

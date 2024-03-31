@@ -12,7 +12,6 @@ export default function Todo() {
         </h1>
         <div className="">
           <AddTodo />
-          {/* {showEditForm && <EditTodo />} */}
         </div>
         <Todos showEditForm={showEditForm} setShowEditForm={setShowEditForm} />
       </div>
