@@ -3,6 +3,7 @@ import MainLayout from "../../components/Layouts/AuthLayout";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
+import errorHandler from "../../helpers/errorHandler";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -21,19 +22,9 @@ export default function Login() {
         }
       })
       .catch((error) => {
-        handleError(error);
+        errorHandler(error);
         console.log(error);
       });
-  };
-
-  const handleError = (error: any) => {
-    if (error.response) {
-      toast.error(error.response.data.errorMessage || "An error occured.");
-    } else if (error.request) {
-      toast.error("Request failed. Please try again later.");
-    } else {
-      toast.error(error.message || "An error occured.");
-    }
   };
 
   return (

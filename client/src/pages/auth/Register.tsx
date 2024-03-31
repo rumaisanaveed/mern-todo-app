@@ -3,6 +3,7 @@ import MainLayout from "../../components/Layouts/AuthLayout";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
+import errorHandler from "../../helpers/errorHandler";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -23,19 +24,9 @@ export default function Register() {
           }
         },
         (error) => {
-          handleError(error);
+          errorHandler(error);
         }
       );
-  };
-
-  const handleError = (error: any) => {
-    if (error.response) {
-      toast.error(error.response.data.errorMessage || "An error occured.");
-    } else if (error.request) {
-      toast.error("Request failed. Please try again later.");
-    } else {
-      toast.error(error.message || "An error occured.");
-    }
   };
 
   return (
