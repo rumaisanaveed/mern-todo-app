@@ -24,9 +24,9 @@ yarn-error.log*
 
 # client/.gitignore
 
-# Ignore node_modules folder from the server directory
-server/node_modules
+# Ignore node_modules from the server directory
+../server/node_modules
 
 # Ignore .env file from the server directory
-server/.env
+../server/.env
 
