@@ -1,6 +1,1 @@
-# server/.gitignore
-
-# dependencies
 /node_modules
-
-.env
