@@ -28,11 +28,21 @@ export default function Todos({
   };
 
   const handleEditFormSubmit = () => {
+    const mystoredAccessToken = localStorage.getItem("access-token");
     axios
-      .put(`http://localhost:5001/api/todos/${updatingTodoId}`, {
-        todo: prevTodo,
-      })
+      .put(
+        `http://localhost:5001/api/todos/${updatingTodoId}`,
+        {
+          todo: prevTodo,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${mystoredAccessToken}`,
+          },
+        }
+      )
       .then((response) => {
+        getTodos();
         console.log(response);
         setPrevTodo("");
         setUpdatingTodoId(null);
@@ -42,9 +52,14 @@ export default function Todos({
   };
 
   const getTodos = async () => {
+    const storedAccessToken = localStorage.getItem("access-token");
     try {
-      const response = await axios.get("http://localhost:5001/api/todos");
-      // console.log(response.data);
+      const response = await axios.get("http://localhost:5001/api/todos", {
+        headers: {
+          Authorization: `Bearer ${storedAccessToken}`,
+        },
+      });
+      console.log("Fetched todos", response.data);
       setTodos(response.data);
     } catch (err) {
       console.log(err);
@@ -53,15 +68,23 @@ export default function Todos({
 
   const handleDelete = (id: any) => {
     console.log(id);
+    let mystoredAccessToken = localStorage.getItem("access-token");
     axios
-      .delete(`http://localhost:5001/api/todos/${id}`)
-      .then((response) => console.log(response))
+      .delete(`http://localhost:5001/api/todos/${id}`, {
+        headers: {
+          Authorization: `Bearer ${mystoredAccessToken}`,
+        },
+      })
+      .then((response) => {
+        console.log(response);
+        getTodos();
+      })
       .catch((err) => console.log(err));
   };
 
   useEffect(() => {
     getTodos();
-  }, [todos]);
+  }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPrevTodo(e.target.value);

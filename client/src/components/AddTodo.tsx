@@ -4,11 +4,20 @@ import { useState } from "react";
 export default function AddTodo() {
   const [inputValue, setInputValue] = useState<string>("");
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    let mystoredAccessToken = localStorage.getItem("access-token");
     e.preventDefault();
     axios
-      .post("http://localhost:5001/api/todos", {
-        todo: inputValue,
-      })
+      .post(
+        "http://localhost:5001/api/todos",
+        {
+          todo: inputValue,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${mystoredAccessToken}`,
+          },
+        }
+      )
       .then(
         (response) => {
           console.log(response);
@@ -22,7 +31,7 @@ export default function AddTodo() {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
-    console.log(inputValue);
+    // console.log(inputValue);
   };
   return (
     <form onSubmit={handleSubmit}>

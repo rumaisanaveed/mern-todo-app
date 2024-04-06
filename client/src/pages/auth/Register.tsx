@@ -22,7 +22,7 @@ export default function Register() {
           if (response.status === 201) {
             toast.success("You've successfully signed in.");
             setTimeout(() => {
-              navigate("/");
+              navigate("/login");
             }, 2000);
           }
         },

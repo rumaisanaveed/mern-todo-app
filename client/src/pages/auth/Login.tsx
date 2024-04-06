@@ -4,24 +4,66 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import errorHandler from "../../helpers/errorHandler";
+import { useEffect } from "react";
 
 export default function Login() {
   const navigate = useNavigate();
 
   const onFinish = (values: any) => {
-    console.log(values);
+    // console.log(values);
     axios
       .post("http://localhost:5001/api/users/login", {
         email: values.email,
         password: values.password,
       })
       .then((response) => {
-        console.log(response);
+        // console.log(response);
+        // console.log(response.data.accessToken);
+
         if (response.status === 200) {
+          const myAccessToken = response.data.accessToken;
+          // console.log(myAccessToken);
+
+          // Save accessToken in localStorage or sessionStorage or in a state variable
+          // For example, localStorage.setItem('accessToken', accessToken);
+
+          localStorage.setItem("access-token", myAccessToken);
+          // const storedAccessToken = localStorage.getItem("access-token");
+          // console.log(storedAccessToken);
+
+          axios
+            .get("http://localhost:5001/api/todos", {
+              headers: {
+                Authorization: `Bearer ${myAccessToken}`,
+              },
+            })
+            .then((response) => {
+              // console.log(response.data);
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+
+          // Pass accessToken to getCurrentUser endpoint
+          axios
+            .get("http://localhost:5001/api/users/current", {
+              headers: {
+                Authorization: `Bearer ${myAccessToken}`,
+              },
+            })
+            .then((userResponse) => {
+              console.log("Current user:", userResponse.data);
+              // Do something with the current user data
+            })
+            .catch((error) => {
+              console.error("Error fetching current user:", error);
+              errorHandler(error);
+            });
+
           toast.success("You've successfully logged in.");
           setTimeout(() => {
             navigate("/");
-          }, 1000);
+          }, 4000);
         }
       })
       .catch((error) => {
