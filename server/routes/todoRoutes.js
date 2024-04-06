@@ -9,8 +9,12 @@ const {
   editTodo,
   deleteTodo,
 } = require("../controllers/todoController");
+const validateToken = require("../middleware/validateToken");
+
+router.use(validateToken);
 
 // keep same paths at one place
+
 router.route("/").get(getTodos).post(addTodo);
 
 router.route("/:id").get(getTodo).put(editTodo).delete(deleteTodo);

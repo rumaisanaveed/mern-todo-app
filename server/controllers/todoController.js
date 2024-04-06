@@ -6,7 +6,7 @@ const Todos = require("../models/todoModel");
 // @route Get /api/todos
 // @access public
 const getTodos = asyncHandler(async (req, res) => {
-  const todos = await Todos.find();
+  const todos = await Todos.find({ user_id: req.user.id });
   res.status(200).json(todos);
 });
 
@@ -34,6 +34,7 @@ const addTodo = asyncHandler(async (req, res) => {
   }
   const newTodo = Todos.create({
     todo,
+    user_id: req.user.id,
   });
   res.status(201).json(newTodo);
 });
@@ -46,6 +47,13 @@ const editTodo = asyncHandler(async (req, res) => {
   if (!todo) {
     res.status(404);
     throw new Error("Todo not found");
+  }
+
+  if (todo.user_id.toString() !== req.user.id) {
+    res.status(403);
+    throw new Error(
+      "User don't have permission to update other users contacts"
+    );
   }
   const updatedTodo = await Todos.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
@@ -61,6 +69,12 @@ const deleteTodo = asyncHandler(async (req, res) => {
   if (!todo) {
     res.status(404);
     throw new Error("Todo not found");
+  }
+  if (todo.user_id.toString() !== req.user.id) {
+    res.status(403);
+    throw new Error(
+      "User don't have permission to update other users contacts"
+    );
   }
   res.status(200).json(todo);
 });
